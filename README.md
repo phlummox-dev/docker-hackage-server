@@ -1,6 +1,8 @@
 
 # phlummox/hackage-server
 
+[![build status](https://github.com/phlummox-dev/docker-hackage-server/actions/workflows/ci.yml/badge.svg)](https://github.com/phlummox-dev/docker-hackage-server/actions/workflows/ci.yml)
+
 A Docker image for running an instance of [`hackage-server`][hackage-server] for
 testing purposes. It includes an "admin" user (created with password "admin"),
 that has been added to the "uploaders" group.
