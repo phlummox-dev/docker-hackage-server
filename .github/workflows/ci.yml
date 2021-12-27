@@ -9,3 +9,13 @@ on:
     paths-ignore:
       - '**.md'
 
+jobs:
+  docker_build:
+    name: docker build
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+      name: Check out code
+
+
