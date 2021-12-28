@@ -8,6 +8,7 @@ on:
   push:
     paths-ignore:
       - '**.md'
+  release:
 
 env:
   REGISTRY: ghcr.io
@@ -107,7 +108,7 @@ jobs:
           docker push ${GH_IMAGE_ID}:latest
 
       - name: push to docker registry
-        if: github.event_name != 'pull_request'
+        if: github.event_name == 'release'
         shell: bash
         run: |
           set -x
