@@ -25,13 +25,13 @@ The suggested command-line invocation for running a container is:
 
 ```
 docker run --rm -it --net=host phlummox/hackage-server:latest \
-			hackage-server run  --static-dir=datafiles --base-uri=http://localhost:8080/
+    hackage-server run  --static-dir=datafiles --base-uri=http://localhost:8080/
 ```
 
 If you get errors about lock-files, try:
 
 ```
 docker run --rm -it --net=host phlummox/hackage-server:latest \
-			hackage-server run bash -c 'rm -f state/db/*/*/*.lock && rm -f state/db/*/*.lock && hackage-server run --static-dir=datafiles --base-uri=http://localhost:8080/'
+    bash -c 'rm -f state/db/*/*/*.lock && rm -f state/db/*/*.lock && hackage-server run --static-dir=datafiles --base-uri=http://localhost:8080/'
 ```
 
