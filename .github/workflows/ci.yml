@@ -9,6 +9,8 @@ on:
     paths-ignore:
       - '**.md'
   release:
+    types:
+      - created
 
 env:
   REGISTRY: ghcr.io
