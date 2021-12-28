@@ -6,14 +6,16 @@ ARG GHC_VERSION=8.2.2 \
 
 RUN  \
       apt-get update  \
-  &&  apt-get install -y --no-install-recommends \
-          software-properties-common \
   &&  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        git         \
-        libicu-dev  \
-        libssl-dev  \
-        unzip       \
-        zlib1g-dev  \
+        ca-certificates             \
+        git                         \
+        libicu-dev                  \
+        libssl-dev                  \
+        netbase                     \
+        openssl                     \
+        software-properties-common  \
+        unzip                       \
+        zlib1g-dev                  \
   &&  apt-add-repository ppa:hvr/ghc \
   &&  apt-get update \
   &&  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -35,8 +37,10 @@ ARG HACKAGE_VERSION=hackage-deployment-2020-05-03
 RUN \
       cabal v2-update \
   &&  git clone https://github.com/haskell/hackage-server.git . \
-  &&  git checkout ${HACKAGE_VERSION} \
-  &&  cabal v2-build --only-dependencies \
+  &&  git checkout ${HACKAGE_VERSION}
+
+RUN \
+      cabal v2-build --only-dependencies \
   &&  cabal v2-install --install-method=copy --constraint='text < 2.0'  hackage-repo-tool
 
 ENV PATH /root/.cabal/bin:$PATH
@@ -90,6 +94,10 @@ RUN \
   &&  rm -f state/db/*/*/*.lock \
   &&  rm -f state/db/*/*.lock
 
+# This step might end up being somewhat flaky:
+# in which case, the principled way of doing it would be
+# to write custom Haskell code which exposes the
+# "add-an-uploader" logic to the command-line.
 RUN \
      set -vx; \
      hackage-server run  --static-dir=datafiles --base-uri=http://localhost:8080/ & \
