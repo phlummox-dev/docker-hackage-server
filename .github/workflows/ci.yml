@@ -142,9 +142,9 @@ jobs:
           # pin the version of qemu installed, since more recent
           # ones seem buggy: see e.g.
           # <https://github.com/rust-osdev/bootloader/commit/2efd8824223234bcaf83180207cce6aebec9c45a>
-          choco install qemu --version 2021.5.5
+          #choco install qemu --version 2021.5.5
 
-          for prog in make sha256sum qemu-system-x86_64; do
+          for prog in make sha256sum ; do
             printf '** %s **\n\n' "${prog}"
             ${prog} --version || true
           done
