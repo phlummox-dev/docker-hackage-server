@@ -148,6 +148,11 @@ jobs:
             printf '** %s **\n\n' "${prog}"
             ${prog} --version || true
           done
+          
+          ghc --version
+          cabal --version
+          which cabal
+          ls -a /c/
 
       - name: set docker image info
         id: info
@@ -214,8 +219,8 @@ jobs:
 
           echo "${{ steps.meta.outputs.labels }}" > oc_labels
 
-          # install ghc 8.2.2
-          stack --resolver=lts-11 setup
+          # install ghc 8.8.4
+          stack --resolver=lts-16 setup
           ghc_loc=$(stack --resolver=lts-11 exec which -- ghc)
 
           git clone https://github.com/haskell/hackage-server.git
