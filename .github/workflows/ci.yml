@@ -138,7 +138,7 @@ jobs:
         run: |
           set -x
           choco install make
-          choco install gnuwin32-coreutils.install
+          choco install gnuwin32-coreutils.install --version 5.3.0
           # pin the version of qemu installed, since more recent
           # ones seem buggy: see e.g.
           # <https://github.com/rust-osdev/bootloader/commit/2efd8824223234bcaf83180207cce6aebec9c45a>
