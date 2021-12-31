@@ -139,18 +139,15 @@ jobs:
           set -x
           choco install make
           choco install gnuwin32-coreutils.install
-          choco install qemu
+          # pin the version of qemu installed, since more recent
+          # ones seem buggy: see e.g.
+          # <https://github.com/rust-osdev/bootloader/commit/2efd8824223234bcaf83180207cce6aebec9c45a>
+          choco install qemu --version 2021.5.5
 
-          make --version
-          sha256sum --version
-          echo >&1
-          echo >&2
-          printf '*-------*\n'
-
-          cat -n C:\ProgramData\chocolatey\logs\chocolatey.log || true
-          #qemu-img --version || true
-          #which qemu-img
-          #ls -al $(basedir $(which qemu-img))
+          for prog in make sha256sum qemu-system-x86_64; do
+            printf '** %s **\n\n' "${prog}"
+            ${prog} --version || true
+          done
 
       - name: set docker image info
         id: info
@@ -192,9 +189,6 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
@@ -220,12 +214,17 @@ jobs:
 
           echo "${{ steps.meta.outputs.labels }}" > oc_labels
 
-          cabal v2-update
+          # install ghc 8.2.2
+          stack --resolver=lts-11 setup
+          ghc_loc=$(stack --resolver=lts-11 exec which -- ghc)
+
           git clone https://github.com/haskell/hackage-server.git
           cd hackage-server
-          cabal v2-build --only-dependencies
-          cabal v2-install --install-method=copy --constraint='text < 2.0'  hackage-repo-tool
-          hackage-repo-tool create-keys --keys keys
+
+          cabal v2-update
+          cabal v2-build   --with-ghc=${ghc_loc} --only-dependencies
+          cabal v2-install -v --with-ghc=${ghc_loc} --install-method=copy --constraint='text < 2.0'  hackage-repo-tool
+          #hackage-repo-tool create-keys --keys keys
 
           #python3 ./build.py
 
