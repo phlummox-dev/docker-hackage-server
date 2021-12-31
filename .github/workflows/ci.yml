@@ -221,7 +221,10 @@ jobs:
 
           # install ghc 8.8.4
           stack --resolver=lts-16 setup
-          ghc_loc=$(stack --resolver=lts-11 exec which -- ghc)
+          ghc_loc=$(stack --silent --resolver=lts-16  path  --compiler-exe)
+          
+          echo ghc loc is $ghc_loc
+          $ghc_loc --version
 
           git clone https://github.com/haskell/hackage-server.git
           cd hackage-server
