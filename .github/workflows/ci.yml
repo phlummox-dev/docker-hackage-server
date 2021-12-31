@@ -143,7 +143,14 @@ jobs:
 
           make --version
           sha256sum --version
-          qemu-system-x86_64 --version
+          echo >&1
+          echo >&2
+          printf '*-------*\n'
+
+          cat -n C:\ProgramData\chocolatey\logs\chocolatey.log || true
+          #qemu-img --version || true
+          #which qemu-img
+          #ls -al $(basedir $(which qemu-img))
 
       - name: set docker image info
         id: info
